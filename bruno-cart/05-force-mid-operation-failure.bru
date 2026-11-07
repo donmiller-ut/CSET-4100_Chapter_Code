@@ -1,0 +1,28 @@
+meta {
+  name: Force mid-operation capacity failure
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{baseUrl}}/api/customers/100/cart/items/46
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+body:json {
+  {"quantity":8,"expectedVersion":2}
+}
+
+tests {
+  test("rolls back an item write that would exceed cart capacity", function () {
+    expect(res.status).to.equal(409);
+    expect(res.body.code).to.equal("cart_capacity_exceeded");
+    expect(res.body.detail).to.include("attempted 21");
+  });
+}

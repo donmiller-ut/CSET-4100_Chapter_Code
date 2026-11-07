@@ -1,0 +1,27 @@
+meta {
+  name: Reject inactive product
+  type: http
+  seq: 7
+}
+
+put {
+  url: {{baseUrl}}/api/customers/100/cart/items/45
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+body:json {
+  {"quantity":1,"expectedVersion":2}
+}
+
+tests {
+  test("does not add an inactive product", function () {
+    expect(res.status).to.equal(422);
+    expect(res.body.code).to.equal("inactive_product");
+  });
+}

@@ -1,0 +1,27 @@
+meta {
+  name: Reject stale version
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{baseUrl}}/api/customers/100/cart/items/44
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+body:json {
+  {"quantity":2,"expectedVersion":0}
+}
+
+tests {
+  test("returns a stable optimistic conflict", function () {
+    expect(res.status).to.equal(409);
+    expect(res.body.code).to.equal("cart_version_conflict");
+  });
+}

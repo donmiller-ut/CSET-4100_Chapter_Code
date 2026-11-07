@@ -1,0 +1,24 @@
+meta {
+  name: Prove rollback
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/api/customers/100/cart
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+tests {
+  test("failed update leaves item, total, and version unchanged", function () {
+    expect(res.status).to.equal(200);
+    expect(res.body.version).to.equal(2);
+    expect(res.body.totalQuantity).to.equal(13);
+    expect(res.body.items.some((item) => item.productId === 46)).to.equal(false);
+  });
+}

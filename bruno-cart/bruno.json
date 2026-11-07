@@ -1,0 +1,6 @@
+{
+  "version": "1",
+  "name": "Chapter 10 Transactional Cart",
+  "type": "collection",
+  "ignore": ["node_modules", ".git"]
+}
